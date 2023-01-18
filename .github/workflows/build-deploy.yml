@@ -18,23 +18,14 @@ jobs:
         with:
           node-version: 18
       - name: Cache node modules
-        id: cache-npm
-        env:
-          cache-name: cache-node-modules
+        id: cache
         uses: actions/cache@v3
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        continue-on-error: true
-        run: npm ls
-      - name: Install NPM Packages
-        run: npm ci
+          path: ./node_modules
+          key: ${{ runner.os }}-modules-${{ hashFiles('package-lock.json') }}
+      - if: steps.cache.outputs.cache-hit != 'true'
+        name: Install NPM Packages
+        run: npm npm ci --ignore-scripts
       - name: Build Project
         run: npm run build
       - name: Upload build artifact
