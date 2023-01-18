@@ -32,9 +32,9 @@ jobs:
       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         name: List the state of node modules
         continue-on-error: true
-        run: npm list
+        run: npm ls
       - name: Install NPM Packages
-        run: npm install
+        run: npm ci
       - name: Build Project
         run: npm run build
       - name: Upload build artifact
