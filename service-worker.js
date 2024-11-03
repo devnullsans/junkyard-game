@@ -41,7 +41,7 @@ const FILES_TO_CACHE = [
   "/junkyard-game/assets/vehicles/9-0.png",
   "/junkyard-game/assets/vehicles/9-1.png",
   "/junkyard-game/assets/vehicles/10-0.png",
-  "/junkyard-game/assets/vehicles/10-1.png"
+  "/junkyard-game/assets/vehicles/10-1.png",
 ];
 
 self.addEventListener("install", (evt) => {
@@ -61,6 +61,13 @@ self.addEventListener("activate", (evt) => {
 });
 
 self.addEventListener("fetch", (evt) => {
-  if (evt.request.method === "GET")
-    evt.respondWith(caches.match(evt.request).then((res) => res ?? fetch(evt.request)));
+  if (evt.request.method === "GET") {
+    console.log("GET Request detected", evt.request);
+    evt.respondWith(
+      caches.match(evt.request).then((res) => {
+        console.log("Offline Response", res);
+        return res ?? fetch(evt.request);
+      })
+    );
+  }
 });
